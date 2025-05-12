@@ -1,13 +1,62 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="/src/style.css" rel="stylesheet" />
-    <title>Vite + TS</title>
-  </head>
-  <body>
-    <script type="module" src="/src/main.ts"></script>
-  </body>
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/vite.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link href="/src/style.css" rel="stylesheet" />
+		<title>Vite + TS</title>
+	</head>
+	<body class="bg-gray-light">
+		<div x-data="{open: false}">
+			<button
+				@click="open = true"
+				class="rounded-full p-2 outline-2 outline-offset-[-2px] duration-150 outline-dashed hover:bg-green-400 hover:outline-transparent"
+			>
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke-width="1.5"
+					stroke="currentColor"
+					class="size-6"
+				>
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						d="M12 4.5v15m7.5-7.5h-15"
+					/>
+				</svg>
+			</button>
+
+			<div
+				x-show="open"
+				x-transition.opacity.duration.150ms
+				class="fixed inset-0 bg-black/50"
+			></div>
+
+			<div
+				x-show="open"
+				x-transition.origin.center.duration.150ms
+				class="fixed inset-0 z-10 flex items-center justify-center p-4"
+			>
+				<div
+					class="bg-gray-light flex h-fit w-full max-w-md flex-col items-center justify-center rounded-2xl"
+					@click.outside="open = false"
+				>
+					<h2>Create a new clock</h2>
+					<input type="text" placeholder="Clock name" />
+					<input type="text" placeholder="Date" />
+					<input type="text" placeholder="Time" />
+
+					<div class="flex w-50 justify-between">
+						<button @click="open = false">Cancel</button>
+						<button @click="open = false">Create</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script type="module" src="/src/main.ts"></script>
+	</body>
 </html>
