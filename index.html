@@ -8,7 +8,7 @@
 		<title>Vite + TS</title>
 	</head>
 	<body class="bg-gray-light">
-		<div x-data="{open: false}">
+		<div x-data="{open: true}">
 			<button
 				@click="open = true"
 				class="rounded-full p-2 outline-2 outline-offset-[-2px] duration-150 outline-dashed hover:bg-green-400 hover:outline-transparent"
@@ -41,17 +41,31 @@
 				class="fixed inset-0 z-10 flex items-center justify-center p-4"
 			>
 				<div
-					class="bg-gray-light flex h-fit w-full max-w-md flex-col items-center justify-center rounded-2xl"
 					@click.outside="open = false"
+					class="bg-gray-light flex h-fit w-full max-w-md flex-col items-center justify-center rounded-2xl px-8 py-4"
 				>
-					<h2>Create a new clock</h2>
-					<input type="text" placeholder="Clock name" />
-					<input type="text" placeholder="Date" />
-					<input type="text" placeholder="Time" />
+					<h2 class="text-gray-dark text-2xl">Create a new clock</h2>
+					<div class="my-4 flex w-full flex-col gap-2">
+						<input
+							type="text"
+							placeholder="Clock name"
+							class="border-gray-dark/50 text-gray-dark focus:border-gray-dark rounded-xl border-2 px-4 py-2 outline-none"
+						/>
+					</div>
 
 					<div class="flex w-50 justify-between">
-						<button @click="open = false">Cancel</button>
-						<button @click="open = false">Create</button>
+						<button
+							@click="open = false"
+							class="hover:text-gray-light rounded-xl px-4 py-2 duration-150 hover:bg-red-500"
+						>
+							Cancel
+						</button>
+						<button
+							@click="open = false"
+							class="hover:text-gray-light text-gray-dark rounded-xl bg-green-300 px-4 py-2 duration-150 hover:bg-green-600"
+						>
+							Create
+						</button>
 					</div>
 				</div>
 			</div>
