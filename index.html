@@ -8,11 +8,15 @@
 		<title>Memento mori</title>
 	</head>
 	<body class="bg-gray-light dark:bg-gray-dark">
-		<div class="flex h-screen grow flex-col items-center justify-center">
+		<div
+			x-data="timer"
+			class="flex h-screen grow flex-col items-center justify-center"
+		>
 			<div class="flex h-9/12 items-center justify-center">
-				<span class="text-gray-dark dark:text-gray-light"
-					>12:30:45</span
-				>
+				<span
+					x-text="formattedLeftTime"
+					class="text-gray-dark dark:text-gray-light"
+				></span>
 			</div>
 			<div class="flex h-3/12 flex-row items-center justify-center gap-2">
 				<span class="text-gray-dark dark:text-gray-light"
@@ -29,7 +33,7 @@
 		<div
 			class="absolute top-0 right-0 flex h-9/12 w-32 flex-col items-center justify-between py-8"
 		>
-			<div x-data="{open: false}">
+			<div x-data="{open: false}" x-init="open = false">
 				<button
 					@click="open = true"
 					class="outline-gray-dark dark:outline-gray-light text-gray-dark dark:text-gray-light dark:hover:text-gray-dark rounded-full p-2 outline-2 outline-offset-[-2px] duration-150 outline-dashed hover:bg-green-400 hover:outline-transparent"

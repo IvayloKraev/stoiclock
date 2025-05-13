@@ -2,10 +2,43 @@ import Alpine from "alpinejs";
 
 window.Alpine = Alpine;
 
-interface Clock {
+interface Timer {
+	id: number;
 	name: string;
 	dateTime: Date;
+	leftTime: Date;
 }
+type NewClock = Omit<Timer, "id" | "leftTime">;
+type Clock = Omit<Timer, "leftTime">;
+
+interface ClockStore {
+	clocks: Clock[];
+	init(): void;
+	addClock(newClock: NewClock): void;
+}
+
+Alpine.store("clocks", {
+	clocks: [] as Clock[],
+	init() {
+		(this as ClockStore).clocks = JSON.parse(
+			localStorage.getItem("clocks") || "[]",
+		);
+	},
+	addClock(newClock: NewClock) {
+		(this as ClockStore).clocks = JSON.parse(
+			localStorage.getItem("clocks") || "[]",
+		);
+		(this as ClockStore).clocks.push({
+			id: Date.now(),
+			name: newClock.name,
+			dateTime: newClock.dateTime,
+		});
+		localStorage.setItem(
+			"clocks",
+			JSON.stringify((this as ClockStore).clocks),
+		);
+	},
+} as ClockStore);
 
 Alpine.data("newClockForm", () => ({
 	name: null as string | null,
@@ -20,11 +53,13 @@ Alpine.data("newClockForm", () => ({
 		}
 
 		const dateTime: Date = new Date(this.date + " " + this.time);
-		const clocks: Clock[] = JSON.parse(
-			localStorage.getItem("clocks") || "[]",
-		);
-		clocks.push({ name: this.name, dateTime });
-		localStorage.setItem("clocks", JSON.stringify(clocks));
+
+		console.log(dateTime.toLocaleString());
+
+		(Alpine.store("clocks") as ClockStore).addClock({
+			name: this.name,
+			dateTime: dateTime,
+		});
 
 		this.clear();
 	},
@@ -32,6 +67,43 @@ Alpine.data("newClockForm", () => ({
 		this.name = null;
 		this.date = null;
 		this.time = null;
+	},
+}));
+
+Alpine.data("timer", () => ({
+	timers: [] as Timer[],
+	formattedLeftTime: "HH:MM:SS",
+	init() {
+		const clocks: Clock[] = JSON.parse(
+			JSON.stringify((Alpine.store("clocks") as ClockStore).clocks),
+		);
+
+		clocks.forEach((clock) => {
+			const dateTime: Date = new Date(clock.dateTime);
+
+			this.timers.push({
+				id: clock.id,
+				name: clock.name,
+				dateTime,
+				leftTime: new Date(dateTime.getTime() - Date.now()),
+			});
+		});
+
+		setInterval(() => {
+			this.timers.forEach((timer) => {
+				timer.leftTime = new Date(
+					timer.dateTime.getTime() - Date.now(),
+				);
+				this.updateTime(timer.leftTime);
+			});
+		}, 1000);
+	},
+	updateTime(leftTime: Date) {
+		const hours: number = leftTime.getHours();
+		const minutes: number = leftTime.getMinutes();
+		const seconds: number = leftTime.getSeconds();
+
+		this.formattedLeftTime = `${hours}:${minutes}:${seconds}`;
 	},
 }));
 
