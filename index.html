@@ -7,11 +7,11 @@
 		<link href="/src/style.css" rel="stylesheet" />
 		<title>Vite + TS</title>
 	</head>
-	<body class="bg-gray-light">
+	<body class="bg-gray-light dark:bg-gray-dark">
 		<div x-data="{open: true}">
 			<button
 				@click="open = true"
-				class="rounded-full p-2 outline-2 outline-offset-[-2px] duration-150 outline-dashed hover:bg-green-400 hover:outline-transparent"
+				class="outline-gray-dark dark:outline-gray-light text-gray-dark dark:text-gray-light dark:hover:text-gray-dark rounded-full p-2 outline-2 outline-offset-[-2px] duration-150 outline-dashed hover:bg-green-400 hover:outline-transparent"
 			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
@@ -32,7 +32,7 @@
 			<div
 				x-show="open"
 				x-transition.opacity.duration.150ms
-				class="fixed inset-0 bg-black/50"
+				class="fixed inset-0 bg-black/50 backdrop-blur-[2px] dark:bg-black/30"
 			></div>
 
 			<div
@@ -42,27 +42,30 @@
 			>
 				<div
 					@click.outside="open = false"
-					class="bg-gray-light flex h-fit w-full max-w-md flex-col items-center justify-center rounded-2xl px-8 py-4"
+					x-id="['new-clock-form']"
+					class="bg-gray-light dark:bg-gray-dark flex h-fit w-full max-w-md flex-col items-center justify-center rounded-2xl px-8 py-4"
 				>
-					<h2 class="text-gray-dark text-2xl">Create a new clock</h2>
+					<h2 class="text-gray-dark dark:text-gray-light text-2xl">
+						Create a new clock
+					</h2>
 					<div class="my-4 flex w-full flex-col gap-2">
 						<input
 							type="text"
-							placeholder="Clock name"
-							class="border-gray-dark/50 text-gray-dark focus:border-gray-dark rounded-xl border-2 px-4 py-2 outline-none"
+							placeholder="Enter a name for your clock"
+							class="border-gray-dark/50 dark:border-gray-light/50 text-gray-dark dark:text-gray-light focus:border-gray-dark dark:focus:border-gray-light rounded-xl border-2 px-4 py-2 duration-150 outline-none"
 						/>
 					</div>
 
 					<div class="flex w-50 justify-between">
 						<button
 							@click="open = false"
-							class="hover:text-gray-light rounded-xl px-4 py-2 duration-150 hover:bg-red-500"
+							class="hover:text-gray-light text-gray-dark dark:text-gray-light rounded-xl px-4 py-2 duration-150 hover:bg-red-500"
 						>
 							Cancel
 						</button>
 						<button
 							@click="open = false"
-							class="hover:text-gray-light text-gray-dark rounded-xl bg-green-300 px-4 py-2 duration-150 hover:bg-green-600"
+							class="hover:text-gray-light text-gray-dark dark:text-gray-light dark:hover:text-gray-dark rounded-xl bg-green-300 px-4 py-2 duration-150 hover:bg-green-600 dark:bg-green-800 dark:hover:bg-green-400"
 						>
 							Create
 						</button>
