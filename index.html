@@ -5,83 +5,107 @@
 		<link rel="icon" type="image/svg+xml" href="/vite.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link href="/src/style.css" rel="stylesheet" />
-		<title>Vite + TS</title>
+		<title>Memento mori</title>
 	</head>
 	<body class="bg-gray-light dark:bg-gray-dark">
-		<div x-data="{open: true}">
-			<button
-				@click="open = true"
-				class="outline-gray-dark dark:outline-gray-light text-gray-dark dark:text-gray-light dark:hover:text-gray-dark rounded-full p-2 outline-2 outline-offset-[-2px] duration-150 outline-dashed hover:bg-green-400 hover:outline-transparent"
-			>
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					fill="none"
-					viewBox="0 0 24 24"
-					stroke-width="1.5"
-					stroke="currentColor"
-					class="size-6"
+		<div class="flex h-screen grow flex-col items-center justify-center">
+			<div class="flex h-9/12 items-center justify-center">
+				<span class="text-gray-dark dark:text-gray-light"
+					>12:30:45</span
 				>
-					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						d="M12 4.5v15m7.5-7.5h-15"
-					/>
-				</svg>
-			</button>
+			</div>
+			<div class="flex h-3/12 flex-row items-center justify-center gap-2">
+				<span class="text-gray-dark dark:text-gray-light"
+					>12:30:45</span
+				>
+				<span class="text-gray-dark dark:text-gray-light"
+					>12:30:45</span
+				>
+				<span class="text-gray-dark dark:text-gray-light"
+					>12:30:45</span
+				>
+			</div>
+		</div>
+		<div
+			class="absolute top-0 right-0 flex h-9/12 w-32 flex-col items-center justify-between py-8"
+		>
+			<div x-data="{open: false}">
+				<button
+					@click="open = true"
+					class="outline-gray-dark dark:outline-gray-light text-gray-dark dark:text-gray-light dark:hover:text-gray-dark rounded-full p-2 outline-2 outline-offset-[-2px] duration-150 outline-dashed hover:bg-green-400 hover:outline-transparent"
+				>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke-width="1.5"
+						stroke="currentColor"
+						class="size-6"
+					>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							d="M12 4.5v15m7.5-7.5h-15"
+						/>
+					</svg>
+				</button>
 
-			<div
-				x-show="open"
-				x-transition.opacity.duration.150ms
-				class="fixed inset-0 bg-black/50 backdrop-blur-[2px] dark:bg-black/30"
-			></div>
-
-			<div
-				x-show="open"
-				x-transition.origin.center.duration.150ms
-				class="fixed inset-0 z-10 flex items-center justify-center p-4"
-			>
 				<div
-					@click.outside="open = false; clear()"
-					x-data="newClockForm"
-					x-id="['new-clock-form']"
-					class="bg-gray-light dark:bg-gray-dark flex h-fit w-full max-w-md flex-col items-center justify-center rounded-2xl px-8 py-4"
-				>
-					<h2 class="text-gray-dark dark:text-gray-light text-2xl">
-						Create a new clock
-					</h2>
-					<div class="my-4 flex w-full flex-col gap-2">
-						<input
-							x-model="name"
-							type="text"
-							placeholder="Enter a name for your clock"
-							class="border-gray-dark/50 dark:border-gray-light/50 text-gray-dark dark:text-gray-light focus:border-gray-dark dark:focus:border-gray-light rounded-xl border-2 px-4 py-2 duration-150 outline-none"
-						/>
-						<!--TODO: More intuitive date and time inputs-->
-						<input
-							x-model="date"
-							type="date"
-							class="border-gray-dark/50 dark:border-gray-light/50 text-gray-dark dark:text-gray-light focus:border-gray-dark dark:focus:border-gray-light rounded-xl border-2 px-4 py-2 duration-150 outline-none"
-						/>
-						<input
-							x-model="time"
-							type="time"
-							class="border-gray-dark/50 dark:border-gray-light/50 text-gray-dark dark:text-gray-light focus:border-gray-dark dark:focus:border-gray-light rounded-xl border-2 px-4 py-2 duration-150 outline-none"
-						/>
-					</div>
+					x-show="open"
+					x-transition.opacity.duration.150ms
+					class="fixed inset-0 bg-black/50 backdrop-blur-[2px] dark:bg-black/30"
+				></div>
 
-					<div class="flex w-50 justify-between">
-						<button
-							@click="open = false; clear()"
-							class="hover:text-gray-light text-gray-dark dark:text-gray-light rounded-xl px-4 py-2 duration-150 hover:bg-red-500"
+				<div
+					x-show="open"
+					x-transition.origin.center.duration.150ms
+					class="fixed inset-0 z-10 flex items-center justify-center p-4"
+				>
+					<div
+						@click.outside="open = false; clear()"
+						x-data="newClockForm"
+						x-id="['new-clock-form']"
+						class="bg-gray-light dark:bg-gray-dark flex h-fit w-full max-w-md flex-col items-center justify-center rounded-2xl px-8 py-4"
+					>
+						<h2
+							class="text-gray-dark dark:text-gray-light text-2xl"
 						>
-							Cancel
-						</button>
-						<button
-							@click="open = false; submit()"
-							class="hover:text-gray-light text-gray-dark dark:text-gray-light dark:hover:text-gray-dark rounded-xl bg-green-300 px-4 py-2 duration-150 hover:bg-green-600 dark:bg-green-800 dark:hover:bg-green-400"
-						>
-							Create
-						</button>
+							Create a new clock
+						</h2>
+						<div class="my-4 flex w-full flex-col gap-2">
+							<input
+								x-model="name"
+								type="text"
+								placeholder="Enter a name for your clock"
+								class="border-gray-dark/50 dark:border-gray-light/50 text-gray-dark dark:text-gray-light focus:border-gray-dark dark:focus:border-gray-light rounded-xl border-2 px-4 py-2 duration-150 outline-none"
+							/>
+							<!--TODO: More intuitive date and time inputs-->
+							<input
+								x-model="date"
+								type="date"
+								class="border-gray-dark/50 dark:border-gray-light/50 text-gray-dark dark:text-gray-light focus:border-gray-dark dark:focus:border-gray-light rounded-xl border-2 px-4 py-2 duration-150 outline-none"
+							/>
+							<input
+								x-model="time"
+								type="time"
+								class="border-gray-dark/50 dark:border-gray-light/50 text-gray-dark dark:text-gray-light focus:border-gray-dark dark:focus:border-gray-light rounded-xl border-2 px-4 py-2 duration-150 outline-none"
+							/>
+						</div>
+
+						<div class="flex w-50 justify-between">
+							<button
+								@click="open = false; clear()"
+								class="hover:text-gray-light text-gray-dark dark:text-gray-light rounded-xl px-4 py-2 duration-150 hover:bg-red-500"
+							>
+								Cancel
+							</button>
+							<button
+								@click="open = false; submit()"
+								class="hover:text-gray-light text-gray-dark dark:text-gray-light dark:hover:text-gray-dark rounded-xl bg-green-400 px-4 py-2 duration-150 hover:bg-green-600 dark:bg-green-800 dark:hover:bg-green-400"
+							>
+								Create
+							</button>
+						</div>
 					</div>
 				</div>
 			</div>
