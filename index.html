@@ -41,7 +41,8 @@
 				class="fixed inset-0 z-10 flex items-center justify-center p-4"
 			>
 				<div
-					@click.outside="open = false"
+					@click.outside="open = false; clear()"
+					x-data="newClockForm"
 					x-id="['new-clock-form']"
 					class="bg-gray-light dark:bg-gray-dark flex h-fit w-full max-w-md flex-col items-center justify-center rounded-2xl px-8 py-4"
 				>
@@ -50,21 +51,33 @@
 					</h2>
 					<div class="my-4 flex w-full flex-col gap-2">
 						<input
+							x-model="name"
 							type="text"
 							placeholder="Enter a name for your clock"
+							class="border-gray-dark/50 dark:border-gray-light/50 text-gray-dark dark:text-gray-light focus:border-gray-dark dark:focus:border-gray-light rounded-xl border-2 px-4 py-2 duration-150 outline-none"
+						/>
+						<!--TODO: More intuitive date and time inputs-->
+						<input
+							x-model="date"
+							type="date"
+							class="border-gray-dark/50 dark:border-gray-light/50 text-gray-dark dark:text-gray-light focus:border-gray-dark dark:focus:border-gray-light rounded-xl border-2 px-4 py-2 duration-150 outline-none"
+						/>
+						<input
+							x-model="time"
+							type="time"
 							class="border-gray-dark/50 dark:border-gray-light/50 text-gray-dark dark:text-gray-light focus:border-gray-dark dark:focus:border-gray-light rounded-xl border-2 px-4 py-2 duration-150 outline-none"
 						/>
 					</div>
 
 					<div class="flex w-50 justify-between">
 						<button
-							@click="open = false"
+							@click="open = false; clear()"
 							class="hover:text-gray-light text-gray-dark dark:text-gray-light rounded-xl px-4 py-2 duration-150 hover:bg-red-500"
 						>
 							Cancel
 						</button>
 						<button
-							@click="open = false"
+							@click="open = false; submit()"
 							class="hover:text-gray-light text-gray-dark dark:text-gray-light dark:hover:text-gray-dark rounded-xl bg-green-300 px-4 py-2 duration-150 hover:bg-green-600 dark:bg-green-800 dark:hover:bg-green-400"
 						>
 							Create
