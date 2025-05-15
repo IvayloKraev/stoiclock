@@ -5,8 +5,8 @@ window.Alpine = Alpine;
 interface Timer {
 	id: number;
 	name: string;
-	dateTime: Date;
-	leftTime: Date;
+	dateTime: number;
+	leftTime: number;
 }
 type NewClock = Omit<Timer, "id" | "leftTime">;
 type Clock = Omit<Timer, "leftTime">;
@@ -85,7 +85,7 @@ Alpine.data("newClockForm", () => ({
 			return;
 		}
 
-		const dateTime: Date = new Date(this.date + " " + this.time);
+		const dateTime = new Date(this.date + " " + this.time).getTime();
 
 		(Alpine.store("clocks") as ClockStore).add({
 			name: this.name,
@@ -110,29 +110,27 @@ Alpine.data("timer", () => ({
 		);
 
 		clocks.forEach((clock) => {
-			const dateTime: Date = new Date(clock.dateTime);
-
 			this.timers.push({
 				id: clock.id,
 				name: clock.name,
-				dateTime,
-				leftTime: new Date(dateTime.getTime() - Date.now()),
+				dateTime: clock.dateTime,
+				leftTime: clock.dateTime - Date.now(),
 			});
 		});
 
 		setInterval(() => {
 			this.timers.forEach((timer) => {
-				timer.leftTime = new Date(
-					timer.dateTime.getTime() - Date.now(),
-				);
+				timer.leftTime = timer.dateTime - Date.now();
 				this.updateTime(timer.leftTime);
 			});
-		}, 1000);
+		}, 100);
 	},
-	updateTime(leftTime: Date) {
-		const hours: number = leftTime.getHours();
-		const minutes: number = leftTime.getMinutes();
-		const seconds: number = leftTime.getSeconds();
+	updateTime(leftTime: number) {
+		leftTime = Math.floor(leftTime / 1000);
+
+		const hours   = Math.floor((leftTime % 86_400) / 3_600);
+		const minutes = Math.floor((leftTime % 3_600) / 60);
+		const seconds = leftTime % 60;
 
 		this.formattedLeftTime = `${hours}:${minutes}:${seconds}`;
 	},
