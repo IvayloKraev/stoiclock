@@ -14,7 +14,10 @@ type Clock = Omit<Timer, "leftTime">;
 interface ClockStore {
 	clocks: Clock[];
 	init(): void;
-	addClock(newClock: NewClock): void;
+	getAll(): void;
+	add(newClock: NewClock): void;
+	update(newClock: Clock): void;
+	remove(id: number): void;
 }
 
 Alpine.store("clocks", {
@@ -24,7 +27,13 @@ Alpine.store("clocks", {
 			localStorage.getItem("clocks") || "[]",
 		);
 	},
-	addClock(newClock: NewClock) {
+	getAll() {
+		(this as ClockStore).clocks = JSON.parse(
+			localStorage.getItem("clocks") || "[]",
+		);
+		return (this as ClockStore).clocks;
+	},
+	add(newClock: NewClock) {
 		(this as ClockStore).clocks = JSON.parse(
 			localStorage.getItem("clocks") || "[]",
 		);
@@ -33,6 +42,30 @@ Alpine.store("clocks", {
 			name: newClock.name,
 			dateTime: newClock.dateTime,
 		});
+		localStorage.setItem(
+			"clocks",
+			JSON.stringify((this as ClockStore).clocks),
+		);
+	},
+	update(clock: Clock) {
+		(this as ClockStore).clocks = JSON.parse(
+			localStorage.getItem("clocks") || "[]",
+		);
+		(this as ClockStore).clocks.forEach((c, index) => {
+			if (c.id === clock.id) {
+				(this as ClockStore).clocks[index] = clock;
+			}
+		});
+		localStorage.setItem(
+			"clocks",
+			JSON.stringify((this as ClockStore).clocks),
+		);
+	},
+	remove(id: number) {
+		(this as ClockStore).clocks = JSON.parse(
+			localStorage.getItem("clocks") || "[]",
+		);
+		(this as ClockStore).clocks = (this as ClockStore).clocks.filter((clock) => clock.id !== id);
 		localStorage.setItem(
 			"clocks",
 			JSON.stringify((this as ClockStore).clocks),
@@ -54,9 +87,7 @@ Alpine.data("newClockForm", () => ({
 
 		const dateTime: Date = new Date(this.date + " " + this.time);
 
-		console.log(dateTime.toLocaleString());
-
-		(Alpine.store("clocks") as ClockStore).addClock({
+		(Alpine.store("clocks") as ClockStore).add({
 			name: this.name,
 			dateTime: dateTime,
 		});
