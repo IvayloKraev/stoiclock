@@ -5,11 +5,13 @@ window.Alpine = Alpine;
 interface Timer {
 	id: number;
 	name: string;
-	dateTime: number;
-	leftTime: number;
+	endTime: number;
+	leftHours: number;
+	leftMinutes: number;
+	leftSeconds: number;
 }
-type NewClock = Omit<Timer, "id" | "leftTime">;
-type Clock = Omit<Timer, "leftTime">;
+type NewClock = Omit<Timer, "id" | "leftHours" | "leftMinutes" | "leftSeconds">;
+type Clock = Omit<Timer, "leftHours" | "leftMinutes" | "leftSeconds">;
 
 interface ClockStore {
 	clocks: Clock[];
@@ -40,7 +42,7 @@ Alpine.store("clocks", {
 		(this as ClockStore).clocks.push({
 			id: Date.now(),
 			name: newClock.name,
-			dateTime: newClock.dateTime,
+			endTime: newClock.endTime,
 		});
 		localStorage.setItem(
 			"clocks",
@@ -89,7 +91,7 @@ Alpine.data("newClockForm", () => ({
 
 		(Alpine.store("clocks") as ClockStore).add({
 			name: this.name,
-			dateTime: dateTime,
+			endTime: dateTime,
 		});
 
 		this.clear();
@@ -103,36 +105,46 @@ Alpine.data("newClockForm", () => ({
 
 Alpine.data("timer", () => ({
 	timers: [] as Timer[],
-	formattedLeftTime: "HH:MM:SS",
+	selectedTimer: null as Timer | null,
 	init() {
 		const clocks: Clock[] = JSON.parse(
 			JSON.stringify((Alpine.store("clocks") as ClockStore).clocks),
 		);
 
 		clocks.forEach((clock) => {
+			const leftEpochTime = clock.endTime - Date.now();
+			const [hours, minutes, seconds] = this.getLeftTime(leftEpochTime);
+
 			this.timers.push({
 				id: clock.id,
 				name: clock.name,
-				dateTime: clock.dateTime,
-				leftTime: clock.dateTime - Date.now(),
+				endTime: clock.endTime,
+				leftHours: hours,
+				leftMinutes: minutes,
+				leftSeconds: seconds,
 			});
 		});
 
+		this.selectedTimer = this.timers[0];
+
 		setInterval(() => {
 			this.timers.forEach((timer) => {
-				timer.leftTime = timer.dateTime - Date.now();
-				this.updateTime(timer.leftTime);
+				const leftEpochTime = timer.endTime - Date.now();
+				const [hours, minutes, seconds] = this.getLeftTime(leftEpochTime);
+				timer.leftHours = hours;
+				timer.leftMinutes = minutes;
+				timer.leftSeconds = seconds;
 			});
 		}, 100);
 	},
-	updateTime(leftTime: number) {
-		leftTime = Math.floor(leftTime / 1000);
+	getLeftTime(leftTime: number) {
+		leftTime = Math.floor(leftTime / 1_000);
 
 		const hours   = Math.floor((leftTime % 86_400) / 3_600);
 		const minutes = Math.floor((leftTime % 3_600) / 60);
 		const seconds = leftTime % 60;
 
-		this.formattedLeftTime = `${hours}:${minutes}:${seconds}`;
+		return [hours, minutes, seconds];
 	},
 }));
 

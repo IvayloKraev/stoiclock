@@ -13,10 +13,11 @@
 			class="flex h-screen grow flex-col items-center justify-center"
 		>
 			<div class="flex h-9/12 items-center justify-center">
-				<span
-					x-text="formattedLeftTime"
-					class="text-gray-dark dark:text-gray-light"
-				></span>
+				<span class="text-gray-dark dark:text-gray-light text-9xl w-44 flex justify-center" x-text="selectedTimer ? String(selectedTimer.leftHours).padStart(2, '0') : 'HH'">HH</span>
+				<span class="text-gray-dark dark:text-gray-light text-9xl w-12 flex justify-center">:</span>
+				<span class="text-gray-dark dark:text-gray-light text-9xl w-44 flex justify-center" x-text="selectedTimer ? String(selectedTimer.leftMinutes).padStart(2, '0') : 'MM'">MM</span>
+				<span class="text-gray-dark dark:text-gray-light text-9xl w-12 flex justify-center">:</span>
+				<span class="text-gray-dark dark:text-gray-light text-9xl w-44 flex justify-center" x-text="selectedTimer ? String(selectedTimer.leftSeconds).padStart(2, '0') : 'SS'">SS</span>
 			</div>
 			<div class="flex h-3/12 flex-row items-center justify-center gap-2">
 				<span class="text-gray-dark dark:text-gray-light"
