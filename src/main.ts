@@ -67,7 +67,9 @@ Alpine.store("clocks", {
 		(this as ClockStore).clocks = JSON.parse(
 			localStorage.getItem("clocks") || "[]",
 		);
-		(this as ClockStore).clocks = (this as ClockStore).clocks.filter((clock) => clock.id !== id);
+		(this as ClockStore).clocks = (this as ClockStore).clocks.filter(
+			(clock) => clock.id !== id,
+		);
 		localStorage.setItem(
 			"clocks",
 			JSON.stringify((this as ClockStore).clocks),
@@ -130,7 +132,8 @@ Alpine.data("timer", () => ({
 		setInterval(() => {
 			this.timers.forEach((timer) => {
 				const leftEpochTime = timer.endTime - Date.now();
-				const [hours, minutes, seconds] = this.getLeftTime(leftEpochTime);
+				const [hours, minutes, seconds] =
+					this.getLeftTime(leftEpochTime);
 				timer.leftHours = hours;
 				timer.leftMinutes = minutes;
 				timer.leftSeconds = seconds;
@@ -140,11 +143,25 @@ Alpine.data("timer", () => ({
 	getLeftTime(leftTime: number) {
 		leftTime = Math.floor(leftTime / 1_000);
 
-		const hours   = Math.floor((leftTime % 86_400) / 3_600);
+		const hours = Math.floor((leftTime % 86_400) / 3_600);
 		const minutes = Math.floor((leftTime % 3_600) / 60);
 		const seconds = leftTime % 60;
 
 		return [hours, minutes, seconds];
+	},
+	deleteTimer(id: number) {
+		this.timers = this.timers.filter((timer) => timer.id !== id);
+		(Alpine.store("clocks") as ClockStore).remove(id);
+
+		if (this.timers.length === 0) this.selectedTimer = null;
+		else this.selectedTimer = this.timers[0];
+	},
+	updateTimer(timer: Timer) {
+		(Alpine.store("clocks") as ClockStore).update(timer);
+		this.timers.forEach((t, id) => {
+			if (t.id === timer.id) this.timers[id] = timer;
+		});
+		this.selectedTimer = timer;
 	},
 }));
 
